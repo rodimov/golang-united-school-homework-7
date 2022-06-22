@@ -194,6 +194,18 @@ func TestSort(t *testing.T) {
 				Person{firstName: "D", lastName: "A", birthDay: now},
 				Person{firstName: "D", lastName: "B", birthDay: now},
 			}},
+		{A: People{
+			Person{firstName: "Atest", lastName: "A", birthDay: now},
+			Person{firstName: "Dtest", lastName: "A", birthDay: now},
+			Person{firstName: "Ctest", lastName: "A", birthDay: now},
+			Person{firstName: "Btest", lastName: "A", birthDay: now},
+		},
+			Expected: People{
+				Person{firstName: "Atest", lastName: "A", birthDay: now},
+				Person{firstName: "Btest", lastName: "A", birthDay: now},
+				Person{firstName: "Ctest", lastName: "A", birthDay: now},
+				Person{firstName: "Dtest", lastName: "A", birthDay: now},
+			}},
 	}
 
 	for k, v := range tData {
