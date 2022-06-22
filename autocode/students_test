@@ -23,7 +23,10 @@ func init() {
 
 // WRITE YOUR CODE BELOW
 
-func Test_Len(t *testing.T) {
+const matrixFirst = "1 2\n3 4"
+const matrixSecond = "1 2 3\n4 5 6\n7 8 9\n10 11 12"
+
+func TestLen(t *testing.T) {
 	tData := []struct {
 		A        People
 		Expected int
@@ -51,7 +54,7 @@ func Test_Len(t *testing.T) {
 	}
 }
 
-func Test_Less(t *testing.T) {
+func TestLess(t *testing.T) {
 	now := time.Now()
 
 	tData := []struct {
@@ -124,7 +127,7 @@ func Test_Less(t *testing.T) {
 	}
 }
 
-func Test_Swap(t *testing.T) {
+func TestSwap(t *testing.T) {
 	now := time.Now()
 
 	tData := []struct {
@@ -156,7 +159,7 @@ func Test_Swap(t *testing.T) {
 	}
 }
 
-func Test_Sort(t *testing.T) {
+func TestSort(t *testing.T) {
 	now := time.Now()
 
 	tData := []struct {
@@ -202,7 +205,7 @@ func Test_Sort(t *testing.T) {
 	}
 }
 
-func Test_New_Matrix(t *testing.T) {
+func TestMatrixNew(t *testing.T) {
 	tData := []struct {
 		input    string
 		Expected *Matrix
@@ -238,9 +241,9 @@ func Test_New_Matrix(t *testing.T) {
 	}
 }
 
-func Test_Rows_Matrix(t *testing.T) {
-	first, _ := New("1 2\n3 4")
-	second, _ := New("1 2 3\n4 5 6\n7 8 9\n10 11 12")
+func TestMatrixRows(t *testing.T) {
+	first, _ := New(matrixFirst)
+	second, _ := New(matrixSecond)
 
 	tData := []struct {
 		input    Matrix
@@ -265,9 +268,9 @@ func Test_Rows_Matrix(t *testing.T) {
 	}
 }
 
-func Test_Cols_Matrix(t *testing.T) {
-	first, _ := New("1 2\n3 4")
-	second, _ := New("1 2 3\n4 5 6\n7 8 9\n10 11 12")
+func TestMatrixCols(t *testing.T) {
+	first, _ := New(matrixFirst)
+	second, _ := New(matrixSecond)
 
 	tData := []struct {
 		input    Matrix
@@ -292,9 +295,9 @@ func Test_Cols_Matrix(t *testing.T) {
 	}
 }
 
-func Test_Set_Matrix(t *testing.T) {
-	first, _ := New("1 2\n3 4")
-	second, _ := New("1 2 3\n4 5 6\n7 8 9\n10 11 12")
+func TestMatrixSet(t *testing.T) {
+	first, _ := New(matrixFirst)
+	second, _ := New(matrixSecond)
 
 	tData := []struct {
 		matrix         *Matrix
