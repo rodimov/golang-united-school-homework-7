@@ -1,10 +1,12 @@
 package coverage
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"reflect"
 	"sort"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -95,6 +97,11 @@ func TestLess(t *testing.T) {
 
 		{A: People{
 			Person{firstName: "A", lastName: "A", birthDay: now},
+			Person{firstName: "A", lastName: "A", birthDay: now},
+		}, i: 0, j: 1, Expected: false},
+
+		{A: People{
+			Person{firstName: "A", lastName: "A", birthDay: now},
 			Person{firstName: "A", lastName: "B", birthDay: now},
 		}, i: 0, j: 1, Expected: true},
 
@@ -135,19 +142,52 @@ func TestSwap(t *testing.T) {
 		i        int
 		j        int
 		Expected People
-	}{{A: People{
-		Person{firstName: "A", lastName: "B", birthDay: now},
-		Person{firstName: "D", lastName: "B", birthDay: now},
-		Person{firstName: "C", lastName: "B", birthDay: now},
-		Person{firstName: "B", lastName: "B", birthDay: now},
-	},
-		i: 1, j: 3,
-		Expected: People{
-			Person{firstName: "A", lastName: "B", birthDay: now},
-			Person{firstName: "B", lastName: "B", birthDay: now},
-			Person{firstName: "C", lastName: "B", birthDay: now},
-			Person{firstName: "D", lastName: "B", birthDay: now},
-		}},
+	}{
+		{
+			A: People{
+				Person{firstName: "A", lastName: "B", birthDay: now},
+				Person{firstName: "D", lastName: "B", birthDay: now},
+				Person{firstName: "C", lastName: "B", birthDay: now},
+				Person{firstName: "B", lastName: "B", birthDay: now},
+			},
+			i: 1, j: 3,
+			Expected: People{
+				Person{firstName: "A", lastName: "B", birthDay: now},
+				Person{firstName: "B", lastName: "B", birthDay: now},
+				Person{firstName: "C", lastName: "B", birthDay: now},
+				Person{firstName: "D", lastName: "B", birthDay: now},
+			},
+		},
+		{
+			A: People{
+				Person{firstName: "A", lastName: "B", birthDay: now},
+				Person{firstName: "D", lastName: "B", birthDay: now},
+				Person{firstName: "C", lastName: "B", birthDay: now},
+				Person{firstName: "B", lastName: "B", birthDay: now},
+			},
+			i: 3, j: 1,
+			Expected: People{
+				Person{firstName: "A", lastName: "B", birthDay: now},
+				Person{firstName: "B", lastName: "B", birthDay: now},
+				Person{firstName: "C", lastName: "B", birthDay: now},
+				Person{firstName: "D", lastName: "B", birthDay: now},
+			},
+		},
+		{
+			A: People{
+				Person{firstName: "A", lastName: "B", birthDay: now},
+				Person{firstName: "B", lastName: "B", birthDay: now},
+				Person{firstName: "C", lastName: "B", birthDay: now},
+				Person{firstName: "D", lastName: "B", birthDay: now},
+			},
+			i: 1, j: 1,
+			Expected: People{
+				Person{firstName: "A", lastName: "B", birthDay: now},
+				Person{firstName: "B", lastName: "B", birthDay: now},
+				Person{firstName: "C", lastName: "B", birthDay: now},
+				Person{firstName: "D", lastName: "B", birthDay: now},
+			},
+		},
 	}
 
 	for k, v := range tData {
@@ -224,6 +264,11 @@ func TestMatrixNew(t *testing.T) {
 		Err      error
 	}{
 		{
+			input:    "",
+			Expected: nil,
+			Err:      strconv.ErrSyntax,
+		},
+		{
 			input:    "1 1\n 1 1",
 			Expected: &Matrix{rows: 2, cols: 2, data: []int{1, 1, 1, 1}},
 			Err:      nil,
@@ -243,8 +288,12 @@ func TestMatrixNew(t *testing.T) {
 	for k, v := range tData {
 		got, err := New(v.input)
 
-		if err != nil && err.Error() != v.Err.Error() {
+		if err != nil && v.Err == nil {
 			t.Errorf("[%d] error happend while not expected: %s", k, err.Error())
+		}
+
+		if err != nil && !(errors.Is(err, v.Err) || err.Error() == v.Err.Error()) {
+			t.Errorf("[%d] unexpected error happend: %s", k, err.Error())
 		}
 
 		if !reflect.DeepEqual(got, v.Expected) {
@@ -319,6 +368,14 @@ func TestMatrixSet(t *testing.T) {
 		Expected       *Matrix
 		ExpectedOutput bool
 	}{
+		{
+			matrix:         first,
+			row:            2,
+			col:            0,
+			value:          5,
+			Expected:       first,
+			ExpectedOutput: false,
+		},
 		{
 			matrix:         first,
 			row:            1,
